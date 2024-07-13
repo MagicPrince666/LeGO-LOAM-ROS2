@@ -22,7 +22,11 @@ int main(int argc, char** argv) {
   RCLCPP_INFO(TF->get_logger(), "\033[1;32m---->\033[0m Started.");
 
   // Use 4 threads
-  rclcpp::executors::MultiThreadedExecutor executor(rclcpp::ExecutorOptions(), 4);//been modify to galactic syntax
+#if defined(USE_GALACTIC_VERSION) || defined(USE_HUMBLE_VERSION) || defined(USE_IRON_VERSION)
+  rclcpp::executors::MultiThreadedExecutor executor(rclcpp::ExecutorOptions(), 4);
+#else
+  rclcpp::executors::MultiThreadedExecutor executor(rclcpp::executor::ExecutorArgs(), 4);
+#endif
   executor.add_node(IP);
   executor.add_node(FA);
   executor.add_node(MO);
